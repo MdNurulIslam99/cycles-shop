@@ -55,17 +55,23 @@ const Navbar = () => {
               <li className="mt-2 flex gap-2">
                 {!isLoggedIn ? (
                   <>
-                    <Link href="/signIn" className="btn btn-sm btn-success">
+                    <Link
+                      href="/signIn"
+                      className="btn btn-sm btn-success rounded-lg"
+                    >
                       SignIn
                     </Link>
-                    <Link href="/signUp" className="btn btn-sm btn-primary">
+                    <Link
+                      href="/signUp"
+                      className="btn btn-sm btn-primary rounded-lg"
+                    >
                       SignUp
                     </Link>
                   </>
                 ) : (
                   <button
                     onClick={handleLogout}
-                    className="btn btn-sm btn-error w-full"
+                    className="btn btn-sm btn-error w-full "
                   >
                     Logout
                   </button>
