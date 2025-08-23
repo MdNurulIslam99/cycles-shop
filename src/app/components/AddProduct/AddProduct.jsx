@@ -23,27 +23,41 @@ const AddProduct = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Product Data:", formData);
-    // TODO: Send data to backend API
-    alert("Product submitted! Check console for data.");
-    setFormData({
-      company: "",
-      brand: "",
-      model: "",
-      type: "",
-      frameSize: "",
-      wheelSize: "",
-      color: "",
-      gears: "",
-      brakeType: "",
-      price: "",
-      stock: "",
-      weightKg: "",
-      description: "",
-      image: "",
-    });
+    try {
+      const res = await fetch("/api/products", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await res.json();
+      if (result.success) {
+        alert("Product added successfully!");
+        setFormData({
+          company: "",
+          brand: "",
+          model: "",
+          type: "",
+          frameSize: "",
+          wheelSize: "",
+          color: "",
+          gears: "",
+          brakeType: "",
+          price: "",
+          stock: "",
+          weightKg: "",
+          description: "",
+          image: "",
+        });
+      } else {
+        alert("Failed to add product: " + result.error);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Something went wrong!");
+    }
   };
 
   return (
@@ -51,124 +65,38 @@ const AddProduct = () => {
       <h1 className="text-3xl font-bold mb-6 text-center">Add New Product</h1>
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div className="grid md:grid-cols-2 gap-4">
-          <input
-            type="text"
-            name="company"
-            value={formData.company}
-            onChange={handleChange}
-            placeholder="Company"
-            className="input input-bordered w-full"
-            required
-          />
-          <input
-            type="text"
-            name="brand"
-            value={formData.brand}
-            onChange={handleChange}
-            placeholder="Brand"
-            className="input input-bordered w-full"
-            required
-          />
-          <input
-            type="text"
-            name="model"
-            value={formData.model}
-            onChange={handleChange}
-            placeholder="Model"
-            className="input input-bordered w-full"
-            required
-          />
-          <input
-            type="text"
-            name="type"
-            value={formData.type}
-            onChange={handleChange}
-            placeholder="Type (Road/Mountain/Hybrid)"
-            className="input input-bordered w-full"
-            required
-          />
-          <input
-            type="text"
-            name="frameSize"
-            value={formData.frameSize}
-            onChange={handleChange}
-            placeholder="Frame Size (S/M/L)"
-            className="input input-bordered w-full"
-            required
-          />
-          <input
-            type="text"
-            name="wheelSize"
-            value={formData.wheelSize}
-            onChange={handleChange}
-            placeholder="Wheel Size"
-            className="input input-bordered w-full"
-            required
-          />
-          <input
-            type="text"
-            name="color"
-            value={formData.color}
-            onChange={handleChange}
-            placeholder="Color"
-            className="input input-bordered w-full"
-            required
-          />
-          <input
-            type="number"
-            name="gears"
-            value={formData.gears}
-            onChange={handleChange}
-            placeholder="Number of Gears"
-            className="input input-bordered w-full"
-            required
-          />
-          <input
-            type="text"
-            name="brakeType"
-            value={formData.brakeType}
-            onChange={handleChange}
-            placeholder="Brake Type"
-            className="input input-bordered w-full"
-            required
-          />
-          <input
-            type="number"
-            name="price"
-            value={formData.price}
-            onChange={handleChange}
-            placeholder="Price"
-            className="input input-bordered w-full"
-            required
-          />
-          <input
-            type="number"
-            name="stock"
-            value={formData.stock}
-            onChange={handleChange}
-            placeholder="Stock Quantity"
-            className="input input-bordered w-full"
-            required
-          />
-          <input
-            type="number"
-            step="0.1"
-            name="weightKg"
-            value={formData.weightKg}
-            onChange={handleChange}
-            placeholder="Weight (kg)"
-            className="input input-bordered w-full"
-            required
-          />
-          <input
-            type="text"
-            name="image"
-            value={formData.image}
-            onChange={handleChange}
-            placeholder="Image URL"
-            className="input input-bordered w-full"
-            required
-          />
+          {[
+            { name: "company", placeholder: "Company" },
+            { name: "brand", placeholder: "Brand" },
+            { name: "model", placeholder: "Model" },
+            { name: "type", placeholder: "Type (Road/Mountain/Hybrid)" },
+            { name: "frameSize", placeholder: "Frame Size (S/M/L)" },
+            { name: "wheelSize", placeholder: "Wheel Size" },
+            { name: "color", placeholder: "Color" },
+            { name: "gears", placeholder: "Number of Gears", type: "number" },
+            { name: "brakeType", placeholder: "Brake Type" },
+            { name: "price", placeholder: "Price", type: "number" },
+            { name: "stock", placeholder: "Stock Quantity", type: "number" },
+            {
+              name: "weightKg",
+              placeholder: "Weight (kg)",
+              type: "number",
+              step: "0.1",
+            },
+            { name: "image", placeholder: "Image URL" },
+          ].map((input) => (
+            <input
+              key={input.name}
+              type={input.type || "text"}
+              name={input.name}
+              value={formData[input.name]}
+              onChange={handleChange}
+              placeholder={input.placeholder}
+              step={input.step}
+              className="input input-bordered w-full"
+              required
+            />
+          ))}
         </div>
 
         <textarea

@@ -3,9 +3,35 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { registerUser } from "@/app/actions/auth/registureUser";
+import toast, { Toaster } from "react-hot-toast";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
+  const session = useSession();
+  const handleOnsubmit = async (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const name = form.name.value;
+    const email = form.email.value;
+    const password = form.password.value;
+    await registerUser({ email, name, password });
+    toast.success("SignUp in Successfully ");
+  };
+
+  const handleSocialLogin = async (providerName) => {
+    const result = await signIn(providerName, { redirect: false });
+  };
+
+  useEffect(() => {
+    if (session?.status == "authenticated") {
+      router.push("/");
+      toast.success("SignUp in Successfully using SocialLogin");
+    }
+  }, [session?.status]);
 
   // Scroll to top when page loads
   useEffect(() => {
@@ -19,7 +45,7 @@ const SignUp = () => {
           Sign Up to your Account
         </h2>
 
-        <form className="space-y-8">
+        <form onSubmit={handleOnsubmit} className="space-y-8">
           <div className="space-y-4">
             {/* Name */}
             <div className="space-y-2">
@@ -108,6 +134,7 @@ const SignUp = () => {
           {/* Google Sign Up */}
           <div className="my-6 space-y-4">
             <button
+              onClick={() => handleSocialLogin("google")}
               type="button"
               className="flex items-center bg-[#0682a1] justify-center w-full p-4 space-x-4 rounded-md text-white"
             >
@@ -150,6 +177,8 @@ const SignUp = () => {
           </Link>
         </form>
       </div>
+      {/* Toast container */}
+      <Toaster position="top-right" reverseOrder={false} />
     </div>
   );
 };

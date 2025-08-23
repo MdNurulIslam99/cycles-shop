@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import featureImage from "../../../public/feature.jpg";
+import Link from "next/link";
 
 export default function FeaturedProductSection() {
   return (
@@ -24,10 +25,15 @@ export default function FeaturedProductSection() {
           </ul>
 
           <div className="flex flex-wrap gap-3">
-            <button className="btn btn-primary rounded-lg">Buy Now</button>
-            <button className="btn btn-outline btn-primary rounded-lg">
-              See Details
-            </button>
+            <Link href="/allproduct">
+              <button className="btn btn-primary rounded-lg">Buy Now</button>
+            </Link>
+            <Link href="/allproduct">
+              {" "}
+              <button className="btn btn-outline btn-primary rounded-lg">
+                See Details
+              </button>
+            </Link>
           </div>
         </div>
 

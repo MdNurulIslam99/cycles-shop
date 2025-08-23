@@ -18,12 +18,14 @@ const HeroSection = () => {
             weekend getaways — we have the perfect ride for you.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-            <Link href="/shop">
-              <button className="btn btn-success btn-wide">🚴‍♂️ Shop Now</button>
+            <Link href="/allproduct">
+              <button className="btn btn-success btn-wide rounded-lg">
+                🚴‍♂️ Shop Now
+              </button>
             </Link>
-            <Link href="/about">
-              <button className="btn btn-outline btn-wide border-green-600 text-green-600 hover:bg-green-600 hover:text-white">
-                Learn More
+            <Link href="/allproduct">
+              <button className="btn btn-outline rounded-lg btn-wide border-green-600 text-green-600 hover:bg-green-600 hover:text-white">
+                View More
               </button>
             </Link>
           </div>

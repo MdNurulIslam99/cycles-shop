@@ -28,10 +28,10 @@ const Footer = () => {
           <Link href="/" className="link link-hover">
             Home
           </Link>
-          <Link href="/add-product" className="link link-hover">
+          <Link href="/addproduct" className="link link-hover">
             Add Product
           </Link>
-          <Link href="/product-list" className="link link-hover">
+          <Link href="/allproduct" className="link link-hover">
             Product List
           </Link>
         </nav>

@@ -1,11 +1,57 @@
 "use client";
 import React, { useEffect } from "react";
 import Link from "next/link";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import toast, { Toaster } from "react-hot-toast";
 
 const SignIn = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
+
+  const router = useRouter();
+  const session = useSession();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    // Show a loading toast and store its ID
+    const toastId = toast.loading("Submitting...");
+
+    try {
+      const response = await signIn("credentials", {
+        email,
+        password,
+        callbackUrl: "/",
+        redirect: false,
+      });
+
+      if (response?.ok) {
+        toast.success("Logged in Successfully", { id: toastId });
+        router.push("/");
+        form.reset();
+      } else {
+        toast.error("Failed to Log In", { id: toastId });
+      }
+    } catch (error) {
+      toast.error("An error occurred while logging in", { id: toastId });
+    }
+  };
+
+  const handleSocialLogin = (providerName) => {
+    signIn(providerName, { redirect: false });
+  };
+
+  useEffect(() => {
+    if (session?.status == "authenticated") {
+      router.push("/");
+      toast.success("SignUp in Successfully using SocialLogin");
+    }
+  }, [session?.status]);
 
   return (
     <div className="flex justify-center mt-5 items-center py-10 px-5 md:px-0">
@@ -14,7 +60,7 @@ const SignIn = () => {
           Login to your account
         </h2>
 
-        <form className="space-y-8">
+        <form onSubmit={handleSubmit} className="space-y-8">
           <div className="space-y-4">
             {/* Email */}
             <div className="space-y-2">
@@ -65,6 +111,7 @@ const SignIn = () => {
           {/* Google Login */}
           <div className="my-6 space-y-4">
             <button
+              onClick={() => handleSocialLogin("google")}
               type="button"
               className="flex bg-[#0d90b1] border-none items-center justify-center w-full p-4 space-x-4 rounded-md focus:ring-2 focus:ring-offset-1 focus:ring-violet-600"
             >
@@ -107,6 +154,9 @@ const SignIn = () => {
           </Link>
         </form>
       </div>
+
+      {/* Toast container */}
+      <Toaster position="top-right" reverseOrder={false} />
     </div>
   );
 };
