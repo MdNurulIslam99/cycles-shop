@@ -31,14 +31,21 @@ const SignIn = () => {
       });
 
       if (response?.ok) {
-        toast.success("Logged in Successfully", { id: toastId });
+        // Update the loading toast to success
+        toast.success("Logged in Successfully", {
+          id: toastId,
+          duration: 3000, // Toast auto-closes after 3 seconds
+        });
         router.push("/");
         form.reset();
       } else {
-        toast.error("Failed to Log In", { id: toastId });
+        toast.error("Failed to Log In", { id: toastId, duration: 3000 });
       }
     } catch (error) {
-      toast.error("An error occurred while logging in", { id: toastId });
+      toast.error("An error occurred while logging in", {
+        id: toastId,
+        duration: 3000,
+      });
     }
   };
 
@@ -47,9 +54,8 @@ const SignIn = () => {
   };
 
   useEffect(() => {
-    if (session?.status == "authenticated") {
+    if (session?.status === "authenticated") {
       router.push("/");
-      toast.success("SignUp in Successfully using SocialLogin");
     }
   }, [session?.status]);
 
@@ -61,44 +67,42 @@ const SignIn = () => {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-8">
-          <div className="space-y-4">
-            {/* Email */}
-            <div className="space-y-2">
-              <label htmlFor="email" className="block text-base font-semibold">
-                Email address
-              </label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                placeholder="leroy@jenkins.com"
-                className="w-full px-3 py-2 border rounded-md bg-gray-50 text-black focus:border-violet-600"
-                required
-              />
-            </div>
+          {/* Email */}
+          <div className="space-y-2">
+            <label htmlFor="email" className="block text-base font-semibold">
+              Email address
+            </label>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              placeholder="leroy@jenkins.com"
+              className="w-full px-3 py-2 border rounded-md bg-gray-50 text-black focus:border-violet-600"
+              required
+            />
+          </div>
 
-            {/* Password */}
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <label htmlFor="password" className="text-base font-semibold">
-                  Password
-                </label>
-                <Link
-                  href="/auth/forgetPassword"
-                  className="text-xs hover:underline"
-                >
-                  Forgot password?
-                </Link>
-              </div>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                placeholder="*****"
-                className="w-full px-3 py-2 border rounded-md bg-gray-50 text-black focus:border-violet-600"
-                required
-              />
+          {/* Password */}
+          <div className="space-y-2">
+            <div className="flex justify-between">
+              <label htmlFor="password" className="text-base font-semibold">
+                Password
+              </label>
+              <Link
+                href="/auth/forgetPassword"
+                className="text-xs hover:underline"
+              >
+                Forgot password?
+              </Link>
             </div>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              placeholder="*****"
+              className="w-full px-3 py-2 border rounded-md bg-gray-50 text-black focus:border-violet-600"
+              required
+            />
           </div>
 
           {/* Divider */}
@@ -156,7 +160,13 @@ const SignIn = () => {
       </div>
 
       {/* Toast container */}
-      <Toaster position="top-right" reverseOrder={false} />
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+        toastOptions={{
+          duration: 3000,
+        }}
+      />
     </div>
   );
 };

@@ -5,12 +5,18 @@ import Link from "next/link";
 const ProductCard = ({ product }) => {
   const { image, company, brand, model, price, _id } = product;
 
+  // Make sure image is valid
+  const safeImage =
+    typeof image === "string" && image.startsWith("http")
+      ? image
+      : "/fallback.jpg"; // Use a local fallback image
+
   return (
     <div className="card bg-base-100 shadow-lg rounded-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300">
       <div className="relative w-full h-60 md:h-72 lg:h-80">
         <Image
-          src={image}
-          alt={`${brand} ${model}`}
+          src={safeImage}
+          alt={`${brand || ""} ${model || ""}`}
           fill
           className="object-cover"
           priority
